@@ -27,6 +27,7 @@ namespace DevBoard.Infrastructure
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            services.AddScoped<IApplicationStatusRepository, ApplicationStatusRepository>();
 
             return services;
         }

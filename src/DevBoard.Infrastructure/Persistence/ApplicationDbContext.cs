@@ -1,4 +1,5 @@
-﻿using DevBoard.Domain.Entities;
+﻿using DevBoard.Domain.Common;
+using DevBoard.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -29,17 +30,15 @@ namespace DevBoard.Infrastructure.Persistence
 
         private void UpdateAuditFields()
         {
-            var entries = ChangeTracker.Entries()
+            var entries = ChangeTracker.Entries<BaseEntity>()
                 .Where(e => e.State is EntityState.Added or EntityState.Modified);
 
             foreach (var entry in entries)
             {
-                if (entry.Property("UpdatedAt").CurrentValue is DateTime)
-                    entry.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
+                entry.Entity.UpdatedAt = DateTime.UtcNow;
 
                 if (entry.State == EntityState.Added)
-                    if (entry.Property("CreatedAt").CurrentValue is DateTime dt && dt == default)
-                        entry.Property("CreatedAt").CurrentValue = DateTime.UtcNow;
+                    entry.Entity.CreatedAt = DateTime.UtcNow;
             }
         }
     }
