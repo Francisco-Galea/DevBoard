@@ -43,5 +43,44 @@ namespace DevBoard.Infrastructure.Repositories
         public async Task<User?> GetByRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
             => await _context.Users
                .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken, cancellationToken);
+
+        public async Task<int> CountByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    => await _context.JobApplications
+        .CountAsync(j => j.UserId == userId, cancellationToken);
+
+        public async Task<int> CountByUserIdThisMonthAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            var now = DateTime.UtcNow;
+            var firstDayOfMonth = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+            return await _context.JobApplications
+                .CountAsync(j => j.UserId == userId && j.AppliedAt >= firstDayOfMonth, cancellationToken);
+        }
+
+        public async Task<IEnumerable<JobApplication>> GetThisMonthByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            var now = DateTime.UtcNow;
+            var firstDayOfMonth = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+            return await _context.JobApplications
+                .Where(j => j.UserId == userId && j.AppliedAt >= firstDayOfMonth)
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<IEnumerable<JobApplication>> GetStaleByUserIdAsync(Guid userId, int staleDays, CancellationToken cancellationToken = default)
+        {
+            var threshold = DateTime.UtcNow.AddDays(-staleDays);
+            return await _context.JobApplications
+                .Where(j => j.UserId == userId
+                    && j.UpdatedAt < threshold
+                    && j.CurrentStatus != "Rejected"
+                    && j.CurrentStatus != "Withdrawn")
+                .OrderBy(j => j.UpdatedAt)
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<JobApplication?> GetLastByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+            => await _context.JobApplications
+                .Where(j => j.UserId == userId)
+                .OrderByDescending(j => j.AppliedAt)
+                .FirstOrDefaultAsync(cancellationToken);
     }
 }

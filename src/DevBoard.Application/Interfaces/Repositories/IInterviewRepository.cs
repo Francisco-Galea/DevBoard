@@ -9,5 +9,6 @@ namespace DevBoard.Application.Interfaces.Repositories
         Task AddAsync(Interview interview, CancellationToken cancellationToken = default);
         void Update(Interview interview);
         void Delete(Interview interview);
+        Task<IEnumerable<Interview>> GetUpcomingByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
     }
 }

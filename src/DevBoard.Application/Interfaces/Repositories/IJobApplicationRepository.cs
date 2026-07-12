@@ -10,5 +10,10 @@ namespace DevBoard.Application.Interfaces.Repositories
         Task AddAsync(JobApplication jobApplication, CancellationToken cancellationToken = default);
         void Update(JobApplication jobApplication);
         void Delete(JobApplication jobApplication);
+        Task<int> CountByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+        Task<int> CountByUserIdThisMonthAsync(Guid userId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<JobApplication>> GetThisMonthByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<JobApplication>> GetStaleByUserIdAsync(Guid userId, int staleDays, CancellationToken cancellationToken = default);
+        Task<JobApplication?> GetLastByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
     }
 }

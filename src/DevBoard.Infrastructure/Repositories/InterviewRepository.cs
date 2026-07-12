@@ -31,5 +31,14 @@ namespace DevBoard.Infrastructure.Repositories
 
         public void Delete(Interview interview)
             => _context.Interviews.Remove(interview);
+
+        public async Task<IEnumerable<Interview>> GetUpcomingByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+            => await _context.Interviews
+                .Include(i => i.JobApplication)
+                .Where(i => i.JobApplication.UserId == userId
+                && i.ScheduledAt >= DateTime.UtcNow)
+                .OrderBy(i => i.ScheduledAt)
+                .Take(5)
+                .ToListAsync(cancellationToken);
     }
 }
