@@ -21,13 +21,17 @@ public class UpdateJobApplicationCommandHandler
 {
     private readonly IJobApplicationRepository _jobApplicationRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IContactRepository _contactRepository;
+
 
     public UpdateJobApplicationCommandHandler(
         IJobApplicationRepository jobApplicationRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IContactRepository contactRepository)
     {
         _jobApplicationRepository = jobApplicationRepository;
         _unitOfWork = unitOfWork;
+        _contactRepository = contactRepository;
     }
 
     public async Task<Result<JobApplicationDto>> Handle(
@@ -35,7 +39,7 @@ public class UpdateJobApplicationCommandHandler
         CancellationToken cancellationToken)
     {
         var jobApplication = await _jobApplicationRepository
-            .GetByIdAsync(command.Id, cancellationToken);
+        .GetByIdAsync(command.Id, cancellationToken);
 
         if (jobApplication is null)
             return Result<JobApplicationDto>.Failure("Postulación no encontrada.");
@@ -43,12 +47,21 @@ public class UpdateJobApplicationCommandHandler
         if (jobApplication.UserId != command.UserId)
             return Result<JobApplicationDto>.Failure("No tenés permiso para modificar esta postulación.");
 
+        string? contactName = null;
+        if (command.ContactId.HasValue)
+        {
+            var contact = await _contactRepository
+                .GetByIdAsync(command.ContactId.Value, cancellationToken);
+            contactName = contact?.FullName;
+        }
+
         jobApplication.CompanyName = command.CompanyName.Trim();
         jobApplication.Position = command.Position.Trim();
         jobApplication.JobUrl = command.JobUrl?.Trim();
         jobApplication.Notes = command.Notes?.Trim();
         jobApplication.AppliedAt = command.AppliedAt;
         jobApplication.ContactId = command.ContactId;
+        jobApplication.ContactName = contactName;
 
         _jobApplicationRepository.Update(jobApplication);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -63,7 +76,7 @@ public class UpdateJobApplicationCommandHandler
             jobApplication.AppliedAt,
             jobApplication.CreatedAt,
             jobApplication.ContactId,
-            jobApplication.Contact?.FullName
+            jobApplication.ContactName
         ));
     }
 }

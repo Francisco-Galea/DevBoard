@@ -30,6 +30,9 @@ namespace DevBoard.Infrastructure.Repositories
             => _context.Contacts.Update(contact);
 
         public void Delete(Contact contact)
-            => _context.Contacts.Remove(contact);
+        {
+            contact.IsDeleted = true;
+            _context.Contacts.Update(contact);
+        }
     }
 }

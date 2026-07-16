@@ -24,6 +24,7 @@ public record StaleApplicationDto(
 
 public record UpcomingInterviewDto(
     Guid Id,
+    Guid JobApplicationId,
     string CompanyName,
     string Position,
     string Type,

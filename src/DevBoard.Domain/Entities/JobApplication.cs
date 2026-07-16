@@ -7,6 +7,7 @@ namespace DevBoard.Domain.Entities
         public Guid UserId { get; set; }
         public Guid? ContactId { get; set; }
         public string CompanyName { get; set; } = string.Empty;
+        public string? ContactName { get; set; }
         public string Position { get; set; } = string.Empty;
         public string? JobUrl { get; set; }
         public string? Notes { get; set; }

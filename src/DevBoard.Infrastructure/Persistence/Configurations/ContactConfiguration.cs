@@ -28,6 +28,11 @@ namespace DevBoard.Infrastructure.Persistence.Configurations
 
             builder.Property(c => c.Notes)
                 .HasMaxLength(1000);
+
+            builder.Property(c => c.IsDeleted)
+                .HasDefaultValue(false);
+
+            builder.HasQueryFilter(c => !c.IsDeleted);
         }
     }
 }

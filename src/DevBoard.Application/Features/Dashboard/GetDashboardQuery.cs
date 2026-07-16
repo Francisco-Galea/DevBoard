@@ -70,6 +70,7 @@ public class GetDashboardQueryHandler
 
         var upcomingDto = upcomingInterviews.Select(i => new UpcomingInterviewDto(
             i.Id,
+            i.JobApplicationId,
             i.JobApplication.CompanyName,
             i.JobApplication.Position,
             i.Type,

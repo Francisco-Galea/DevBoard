@@ -21,19 +21,30 @@ public class CreateJobApplicationCommandHandler
 {
     private readonly IJobApplicationRepository _jobApplicationRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IContactRepository _contactRepository;
 
     public CreateJobApplicationCommandHandler(
         IJobApplicationRepository jobApplicationRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IContactRepository contactRepository)
     {
         _jobApplicationRepository = jobApplicationRepository;
         _unitOfWork = unitOfWork;
+        _contactRepository = contactRepository;
     }
 
     public async Task<Result<JobApplicationDto>> Handle(
         CreateJobApplicationCommand command,
         CancellationToken cancellationToken)
     {
+        string? contactName = null;
+        if (command.ContactId.HasValue)
+        {
+            var contact = await _contactRepository
+                .GetByIdAsync(command.ContactId.Value, cancellationToken);
+            contactName = contact?.FullName;
+        }
+
         var jobApplication = new JobApplication
         {
             Id = Guid.NewGuid(),
@@ -44,7 +55,8 @@ public class CreateJobApplicationCommandHandler
             Notes = command.Notes?.Trim(),
             CurrentStatus = "Applied",
             AppliedAt = command.AppliedAt,
-            ContactId = command.ContactId
+            ContactId = command.ContactId,
+            ContactName = contactName
         };
 
         var initialStatus = new ApplicationStatus
@@ -67,6 +79,6 @@ public class CreateJobApplicationCommandHandler
     private static JobApplicationDto MapToDto(JobApplication j) => new(
         j.Id, j.CompanyName, j.Position, j.JobUrl,
         j.Notes, j.CurrentStatus, j.AppliedAt, j.CreatedAt,
-        j.ContactId, j.Contact?.FullName
+        j.ContactId, j.ContactName
     );
 }

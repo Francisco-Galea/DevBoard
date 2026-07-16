@@ -28,7 +28,7 @@ public class GetJobApplicationsQueryHandler
         var dtos = jobApplications.Select(j => new JobApplicationDto(
             j.Id, j.CompanyName, j.Position, j.JobUrl,
             j.Notes, j.CurrentStatus, j.AppliedAt, j.CreatedAt,
-            j.ContactId, j.Contact?.FullName
+            j.ContactId, j.ContactName
         ));
 
         return Result<IEnumerable<JobApplicationDto>>.Success(dtos);

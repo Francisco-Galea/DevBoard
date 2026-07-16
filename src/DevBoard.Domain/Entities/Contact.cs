@@ -2,7 +2,7 @@
 
 namespace DevBoard.Domain.Entities
 {
-    public class Contact : BaseEntity
+    public class Contact : SoftDeletableEntity
     {
         public Guid UserId { get; set; }
         public string FullName { get; set; } = string.Empty;
