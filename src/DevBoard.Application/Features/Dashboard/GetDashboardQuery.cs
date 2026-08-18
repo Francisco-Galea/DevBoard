@@ -61,8 +61,9 @@ public class GetDashboardQueryHandler
             lastApplication.CurrentStatus,
             lastApplication.AppliedAt,
             lastApplication.CreatedAt,
+            lastApplication.UpdatedAt,
             lastApplication.ContactId,
-            null
+            lastApplication.ContactName
         );
 
         var upcomingInterviews = await _interviewRepository

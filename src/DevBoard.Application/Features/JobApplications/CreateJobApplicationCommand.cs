@@ -78,7 +78,7 @@ public class CreateJobApplicationCommandHandler
 
     private static JobApplicationDto MapToDto(JobApplication j) => new(
         j.Id, j.CompanyName, j.Position, j.JobUrl,
-        j.Notes, j.CurrentStatus, j.AppliedAt, j.CreatedAt,
+        j.Notes, j.CurrentStatus, j.AppliedAt, j.CreatedAt, j.UpdatedAt,
         j.ContactId, j.ContactName
     );
 }

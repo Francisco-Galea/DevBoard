@@ -75,6 +75,7 @@ public class UpdateJobApplicationCommandHandler
             jobApplication.CurrentStatus,
             jobApplication.AppliedAt,
             jobApplication.CreatedAt,
+            jobApplication.UpdatedAt,
             jobApplication.ContactId,
             jobApplication.ContactName
         ));

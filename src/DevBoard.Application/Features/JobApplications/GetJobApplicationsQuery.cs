@@ -26,9 +26,17 @@ public class GetJobApplicationsQueryHandler
             .GetByUserIdAsync(request.UserId, cancellationToken);
 
         var dtos = jobApplications.Select(j => new JobApplicationDto(
-            j.Id, j.CompanyName, j.Position, j.JobUrl,
-            j.Notes, j.CurrentStatus, j.AppliedAt, j.CreatedAt,
-            j.ContactId, j.ContactName
+            j.Id,
+            j.CompanyName,
+            j.Position,
+            j.JobUrl,
+            j.Notes,
+            j.CurrentStatus,
+            j.AppliedAt,
+            j.CreatedAt,
+            j.UpdatedAt,
+            j.ContactId,
+            j.ContactName
         ));
 
         return Result<IEnumerable<JobApplicationDto>>.Success(dtos);

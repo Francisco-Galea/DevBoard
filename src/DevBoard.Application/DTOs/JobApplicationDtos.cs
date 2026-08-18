@@ -1,12 +1,12 @@
 ﻿namespace DevBoard.Application.DTOs
 {
     public record CreateJobApplicationRequest(
-    string CompanyName,
-    string Position,
-    string? JobUrl,
-    string? Notes,
-    DateTime AppliedAt,
-    Guid? ContactId
+        string CompanyName,
+        string Position,
+        string? JobUrl,
+        string? Notes,
+        DateTime AppliedAt,
+        Guid? ContactId
     );
 
     public record UpdateJobApplicationRequest(
@@ -27,8 +27,9 @@
         string CurrentStatus,
         DateTime AppliedAt,
         DateTime CreatedAt,
+        DateTime UpdatedAt,
         Guid? ContactId,
-        string? ContactFullName
+        string? ContactName
     );
 
     public record JobApplicationDetailDto(
@@ -40,8 +41,9 @@
         string CurrentStatus,
         DateTime AppliedAt,
         DateTime CreatedAt,
+        DateTime UpdatedAt,
         Guid? ContactId,
-        string? ContactFullName,
+        string? ContactName,
         IEnumerable<ApplicationStatusDto> StatusHistory,
         IEnumerable<InterviewDto> Interviews
     );

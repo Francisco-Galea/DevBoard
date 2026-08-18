@@ -32,9 +32,17 @@ public class GetJobApplicationByIdQueryHandler
             return Result<JobApplicationDetailDto>.Failure("No tenés permiso para ver esta postulación.");
 
         var dto = new JobApplicationDetailDto(
-            j.Id, j.CompanyName, j.Position, j.JobUrl,
-            j.Notes, j.CurrentStatus, j.AppliedAt, j.CreatedAt,
-            j.ContactId, j.ContactName,
+            j.Id,
+            j.CompanyName,
+            j.Position,
+            j.JobUrl,
+            j.Notes,
+            j.CurrentStatus,
+            j.AppliedAt,
+            j.CreatedAt,
+            j.UpdatedAt,
+            j.ContactId,
+            j.ContactName,
             j.StatusHistory.Select(s => new ApplicationStatusDto(s.Id, s.Status, s.Notes, s.ChangedAt)),
             j.Interviews.Select(i => new InterviewDto(i.Id, i.Type, i.Notes, i.ScheduledAt))
         );
