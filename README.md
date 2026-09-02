@@ -128,7 +128,7 @@ DevBoard.API             → controllers, middleware, DI
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - [PostgreSQL 16](https://www.postgresql.org/download/)
-- [Docker](https://www.docker.com/) *(requerido a partir de Fase 3)*
+- [Docker](https://www.docker.com/) 
 
 ## Configuración local
 
